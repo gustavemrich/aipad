@@ -12,6 +12,9 @@ You pick the operator — **ChatGPT**, **Claude** or **Grok** — and each has a
 > a note under the hero CTAs, a highlighted notice above the deploy button, the deploy modal
 > (steps, title and success copy) and the footer. When deploys go live, those come down.
 
+**X / Twitter:** [@AiPadpf](https://x.com/AiPadpf) — linked from the nav, the hero note and the
+footer, and set as `twitter:site` / `twitter:creator` for link previews.
+
 ## Run it
 
 No build step, no dependencies:
