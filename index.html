@@ -13,6 +13,12 @@
 </head>
 <body>
 
+<!-- placeholder notice -->
+<div class="alert-bar" role="status">
+  <div class="alert-track" id="alertTrack"></div>
+</div>
+<div class="scroll-bar" id="scrollBar" aria-hidden="true"></div>
+
 <!-- ambient layers -->
 <div class="mesh" aria-hidden="true">
   <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
@@ -36,7 +42,7 @@
     <a href="#board">Live board</a>
   </nav>
   <div class="nav-actions">
-    <div class="pill live"><span class="dot"></span> pump.fun · mainnet</div>
+    <div class="pill live"><span class="dot"></span> preview build · not live</div>
     <button class="btn btn-primary" id="connectBtn"><span>Connect Wallet</span></button>
   </div>
 </header>
@@ -51,18 +57,18 @@
       <span class="line">Let an <span class="grad-text glow-text">AI agent</span> run it.</span>
     </h1>
     <p class="sub reveal" style="--d:.12s">
-      Deploy straight to <strong>pump.fun</strong> in one click, then route your creator fees to an autonomous operator.
-      It buys back, farms attention, replies to your community and reports on-chain — 24/7, no team, no bags to hold.
+      Route your creator fees to an autonomous operator on <strong>pump.fun</strong>.
+      It buys back, posts and defends the floor — 24/7, no team.
     </p>
     <div class="hero-cta reveal" style="--d:.18s">
       <a href="#launch" class="btn btn-primary btn-lg"><span>Launch a coin</span><i class="arrow">→</i></a>
       <a href="#agents" class="btn btn-ghost btn-lg"><span>Meet the agents</span></a>
     </div>
+    <p class="hero-note reveal" style="--d:.2s">Deploys are placeholders — nothing is live on-chain yet.</p>
     <div class="hero-stats reveal" style="--d:.24s">
-      <div class="stat"><b class="count" data-to="14827" data-suffix="">0</b><span>coins launched</span></div>
-      <div class="stat"><b class="count" data-to="2.41" data-dec="2" data-prefix="$" data-suffix="M">0</b><span>fees auto-deployed</span></div>
-      <div class="stat"><b class="count" data-to="63" data-suffix="%">0</b><span>agent buyback rate</span></div>
-      <div class="stat"><b class="count" data-to="311" data-suffix="">0</b><span>agents live now</span></div>
+      <div class="stat"><b class="count" data-to="14827" data-suffix="">0</b><span>coins launched*</span></div>
+      <div class="stat"><b class="count" data-to="2.41" data-dec="2" data-prefix="$" data-suffix="M">0</b><span>fees deployed*</span></div>
+      <div class="stat"><b class="count" data-to="311" data-suffix="">0</b><span>agents running</span></div>
     </div>
   </div>
 
@@ -88,21 +94,14 @@
 <section id="agents" class="section">
   <div class="section-head reveal">
     <span class="eyebrow">01 — Pick your operator</span>
-    <h2>Three brains. <span class="grad-text">One job:</span> make your chart go up.</h2>
-    <p>Every agent gets the same fee stream and the same tools — a wallet, a posting account and a command over the bonding curve. What differs is temperament.</p>
+    <h2>Three brains. <span class="grad-text">One job.</span></h2>
+    <p>Same fee stream, same tools. What differs is temperament.</p>
   </div>
 
   <div class="agents" id="agentGrid">
     <!-- cards injected by JS -->
   </div>
 
-  <div class="agent-compare reveal">
-    <div class="compare-row head"><span>Trait</span><span>ChatGPT</span><span>Claude</span><span>Grok</span></div>
-    <div class="compare-row" data-trait="Fee aggression"><span>Fee aggression</span><b data-bar="72"></b><b data-bar="48"></b><b data-bar="95"></b></div>
-    <div class="compare-row" data-trait="Post frequency"><span>Post frequency</span><b data-bar="80"></b><b data-bar="55"></b><b data-bar="99"></b></div>
-    <div class="compare-row" data-trait="Risk control"><span>Risk control</span><b data-bar="66"></b><b data-bar="93"></b><b data-bar="35"></b></div>
-    <div class="compare-row" data-trait="Community replies"><span>Community replies</span><b data-bar="88"></b><b data-bar="90"></b><b data-bar="70"></b></div>
-  </div>
 </section>
 
 <!-- launch -->
@@ -110,7 +109,7 @@
   <div class="section-head reveal">
     <span class="eyebrow">02 — Deploy</span>
     <h2>Mint it in <span class="grad-text">one screen.</span></h2>
-    <p>Fill it out, watch the preview build itself in real time, then send it to the curve.</p>
+    <p>Fill it out and watch the preview build itself.</p>
   </div>
 
   <div class="launch-grid">
@@ -173,16 +172,20 @@
           <button type="button" class="chip on" data-chip="Shitpost hourly">Shitpost hourly</button>
           <button type="button" class="chip" data-chip="Reply to holders">Reply to holders</button>
           <button type="button" class="chip on" data-chip="Defend the floor">Defend the floor</button>
-          <button type="button" class="chip" data-chip="Airdrop diamond hands">Airdrop diamond hands</button>
-          <button type="button" class="chip" data-chip="Bribe KOLs">Bribe KOLs</button>
           <button type="button" class="chip" data-chip="Publish daily report">Publish daily report</button>
         </div>
       </div>
 
+      <div class="notice">
+        <span class="notice-stamp">placeholder</span>
+        <p><b>Deploys are not live yet.</b> This button runs a simulation — no wallet is asked to sign,
+        no token is created and nothing is sent to pump.fun.</p>
+      </div>
+
       <button type="submit" class="btn btn-primary btn-lg full" id="deployBtn">
-        <span>Deploy to pump.fun</span><i class="arrow">→</i>
+        <span>Run placeholder deploy</span><i class="arrow">→</i>
       </button>
-      <p class="fineprint">Simulated interface. Nothing here touches a real chain — memecoins are a great way to lose money.</p>
+      <p class="fineprint">Demo interface. When deploys go live this notice comes down.</p>
     </form>
 
     <aside class="preview-col">
@@ -242,10 +245,9 @@
   </div>
   <div class="steps">
     <div class="step-line" aria-hidden="true"><i id="stepProgress"></i></div>
-    <article class="step reveal"><span class="step-n">1</span><h3>Coin hits the curve</h3><p>Standard pump.fun launch — same bonding curve, same fair start, same 85 SOL graduation to Raydium.</p></article>
-    <article class="step reveal" style="--d:.08s"><span class="step-n">2</span><h3>Fees stream to a vault</h3><p>Your creator fees split live. The agent's share lands in a program-owned vault it can spend but never withdraw.</p></article>
-    <article class="step reveal" style="--d:.16s"><span class="step-n">3</span><h3>Agent goes to work</h3><p>It buys back on dips, posts, replies, and runs whatever mandate you gave it — every action signed and logged.</p></article>
-    <article class="step reveal" style="--d:.24s"><span class="step-n">4</span><h3>You read the receipts</h3><p>A public feed of every trade and post, so holders can audit the operator instead of trusting it.</p></article>
+    <article class="step reveal"><span class="step-n">1</span><h3>Coin hits the curve</h3><p>Standard pump.fun launch — same curve, same fair start, same 85 SOL graduation.</p></article>
+    <article class="step reveal" style="--d:.08s"><span class="step-n">2</span><h3>Fees stream to a vault</h3><p>The agent's share lands in a vault it can spend but never withdraw.</p></article>
+    <article class="step reveal" style="--d:.16s"><span class="step-n">3</span><h3>Agent goes to work</h3><p>It buys back, posts and runs your mandate — every action signed and logged for holders to audit.</p></article>
   </div>
 </section>
 
@@ -254,7 +256,7 @@
   <div class="section-head reveal">
     <span class="eyebrow">04 — Live board</span>
     <h2>Agents currently <span class="grad-text">cooking.</span></h2>
-    <p>Prices move because the market moves. Mostly down. That's the game.</p>
+    <p>Sample data — these coins are illustrative, not real listings.</p>
   </div>
   <div class="board-filters reveal">
     <button class="fbtn on" data-filter="all">All</button>
@@ -269,7 +271,7 @@
   <div class="foot-top">
     <div>
       <a class="brand" href="#top"><span class="brand-mark"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2 3 7v10l9 5 9-5V7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></svg></span><span class="brand-text">AI<span class="grad-text">PAD</span></span></a>
-      <p class="foot-blurb">The launchpad where the fees do the work.</p>
+      <p class="foot-blurb">The launchpad where the fees do the work. Deploys are placeholders while we finish the on-chain side.</p>
     </div>
     <div class="foot-links">
       <div><h4>Product</h4><a href="#agents">Agents</a><a href="#launch">Launch</a><a href="#board">Live board</a></div>
@@ -278,7 +280,7 @@
     </div>
   </div>
   <div class="foot-bot">
-    <span>© 2026 AIPAD — demo interface, not financial advice, not a real product.</span>
+    <span>© 2026 AIPAD — preview build. Deploys are placeholders, not financial advice.</span>
     <span class="mono dim">built for degenerates with taste</span>
   </div>
 </footer>
@@ -291,18 +293,19 @@
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <button class="modal-x" id="modalX" aria-label="Close">✕</button>
     <div class="deploy-anim" id="deployAnim"><span class="ring"></span><span class="ring"></span><span class="tick">✓</span></div>
-    <h3 id="mTitle">Deploying…</h3>
+    <h3 id="mTitle">Simulating deploy…</h3>
     <ul class="deploy-steps" id="deploySteps">
-      <li data-s="Uploading metadata to IPFS"></li>
-      <li data-s="Creating mint + bonding curve"></li>
-      <li data-s="Funding agent vault"></li>
-      <li data-s="Waking up operator"></li>
+      <li data-s="Simulating metadata upload"></li>
+      <li data-s="Simulating mint + bonding curve"></li>
+      <li data-s="Simulating fee vault funding"></li>
+      <li data-s="Waking up operator (demo)"></li>
     </ul>
     <div class="modal-done" id="modalDone">
-      <p class="done-line">Your coin is live and <b id="doneAgent">ChatGPT</b> has the keys to the fee vault.</p>
+      <p class="done-line">Placeholder complete. In the live version <b id="doneAgent">ChatGPT</b> would hold the keys to the fee vault — nothing was created just now.</p>
+      <p class="done-sub">example address, not a real mint</p>
       <div class="done-addr mono" id="doneAddr"></div>
       <div class="modal-actions">
-        <button class="btn btn-primary" id="doneView"><span>View on pump.fun</span></button>
+        <button class="btn btn-primary" id="doneView"><span>Looks good</span></button>
         <button class="btn btn-ghost" id="doneAgain"><span>Launch another</span></button>
       </div>
     </div>

@@ -97,8 +97,24 @@ function applyTheme(id) {
       a: rnd(.15, .8), tw: rnd(.004, .018), p: Math.random() * 6.28
     }));
   };
+  let shots = [];
+  const spawnShot = () => {
+    shots.push({ x: rnd(0, w), y: rnd(0, h * .5), len: rnd(70, 190) * dpr, sp: rnd(7, 13) * dpr, a: 1 });
+    setTimeout(spawnShot, rnd(2600, 7000));
+  };
+  setTimeout(spawnShot, 1800);
+
   const loop = () => {
     ctx.clearRect(0, 0, w, h);
+    for (const s of shots) {
+      s.x += s.sp; s.y += s.sp * .45; s.a -= .012;
+      const g = ctx.createLinearGradient(s.x, s.y, s.x - s.len, s.y - s.len * .45);
+      g.addColorStop(0, `rgba(255,255,255,${clamp(s.a, 0, 1)})`);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1.6 * dpr; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x - s.len, s.y - s.len * .45); ctx.stroke();
+    }
+    shots = shots.filter(s => s.a > 0 && s.x < w + s.len);
     for (const d of dots) {
       d.y -= d.vy; d.p += d.tw;
       if (d.y < -4) { d.y = h + 4; d.x = Math.random() * w; }
@@ -261,7 +277,8 @@ function syncPreview() {
   $('#pvName').textContent = name;
   $('#pvTicker').textContent = '$' + tick;
   $('#pvDesc').textContent = desc;
-  $('#pvOpName').textContent = a.name;
+  const opName = $('#pvOpName');
+  if (!opName.dataset.busy && opName.textContent !== a.name) scramble(opName, a.name);
   $('#pvOpAva').textContent = a.ava;
   $('#pvOpFee').textContent = fee + '% fees';
   $('#descCount').textContent = (F.desc?.value.length || 0) + '/180';
@@ -391,7 +408,7 @@ function typeLog() {
     ['Retire My Mom', 'MOM'], ['Agent Smith', 'SMITH'], ['Fee Eater', 'FEE'], ['Touch Grass', 'GRASS'],
     ['Solana Jesus', 'JESUS'], ['Not A Rug', 'NOTRUG'], ['Turbo Cat', 'TURBO'], ['Exit Liquidity', 'EXIT'],
     ['Diamond Paws', 'PAWS'], ['My Wifes BF', 'WIFE'], ['Unemployed', 'NEET'], ['Last Cycle', 'CYCLE']
-  ];
+  ].slice(0, 9);
   const coins = NAMES.map(([n, s], i) => {
     const agent = ORDER[i % 3];
     return {
@@ -518,14 +535,14 @@ function confetti() {
     if (!F.ticker.value.trim()) { F.ticker.focus(); shake(F.ticker); return; }
 
     modal.classList.add('open'); modal.classList.remove('done');
-    $('#mTitle').textContent = 'Deploying…';
+    $('#mTitle').textContent = 'Simulating deploy…';
     steps.forEach(s => s.className = '');
     let i = 0;
     const run = () => {
       if (i > 0) steps[i - 1].className = 'ok';
       if (i >= steps.length) {
         modal.classList.add('done');
-        $('#mTitle').textContent = 'Live on the curve 🎉';
+        $('#mTitle').textContent = 'Placeholder deploy complete';
         $('#doneAddr').textContent = fakeAddr();
         $('#doneAgent').textContent = AGENTS[current].name;
         confetti();
@@ -560,6 +577,100 @@ function confetti() {
     b.classList.toggle('btn-ghost', on);
   });
 })();
+
+/* ---------- placeholder marquee ---------- */
+(function alertBar() {
+  const t = $('#alertTrack'); if (!t) return;
+  const msg = '<b><i></i> preview build — deploys are placeholders, nothing is live on-chain</b>';
+  t.innerHTML = msg.repeat(10);
+})();
+
+/* ---------- scroll progress ---------- */
+(function scrollBar() {
+  const b = $('#scrollBar'); if (!b) return;
+  const on = () => {
+    const max = document.body.scrollHeight - innerHeight;
+    b.style.width = (max > 0 ? clamp(scrollY / max, 0, 1) : 0) * 100 + '%';
+  };
+  addEventListener('scroll', on, { passive: true });
+  addEventListener('resize', on); on();
+})();
+
+/* ---------- headline word reveal ---------- */
+(function words() {
+  $$('.hero h1 .line').forEach((line, li) => {
+    const parts = line.innerHTML.split(/(<span[^>]*>.*?<\/span>)|\s+/g).filter(Boolean);
+    let i = 0;
+    line.innerHTML = parts.map(p => {
+      const delay = (li * 3 + i++) * .07;
+      // drop-shadow on a background-clip:text node inside the animated wrapper
+      // paints the element box, so the glow rides the wrapper instead.
+      const glow = p.includes('glow-text');
+      if (glow) p = p.replace(' glow-text', '');
+      return `<span class="w${glow ? ' glow-text' : ''}"><i style="--wd:${delay.toFixed(2)}s">${p}</i></span>`;
+    }).join(' ');
+  });
+})();
+
+/* ---------- parallax ---------- */
+(function parallax() {
+  if (reduced) return;
+  const mesh = $('.mesh'), orb = $('.hero-orb'), floor = $('.grid-floor');
+  let y = 0, cur = 0;
+  addEventListener('scroll', () => { y = scrollY; }, { passive: true });
+  (function tick() {
+    cur += (y - cur) * .08;
+    if (mesh) mesh.style.transform = `translateY(${cur * .12}px)`;
+    if (orb) orb.style.transform = `translateY(${cur * -.06}px)`;
+    if (floor) floor.style.opacity = clamp(.5 - cur / 2600, .06, .5);
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* ---------- magnetic buttons + click ripple ---------- */
+(function magnetic() {
+  $$('.btn').forEach(b => {
+    if (!reduced) {
+      b.addEventListener('pointermove', e => {
+        const r = b.getBoundingClientRect();
+        b.style.setProperty('--tx', ((e.clientX - r.left) / r.width - .5) * 9 + 'px');
+        b.style.setProperty('--ty', ((e.clientY - r.top) / r.height - .5) * 6 + 'px');
+        b.style.translate = `${b.style.getPropertyValue('--tx')} ${b.style.getPropertyValue('--ty')}`;
+      });
+      b.addEventListener('pointerleave', () => { b.style.translate = ''; });
+    }
+    b.addEventListener('pointerdown', e => {
+      const r = b.getBoundingClientRect();
+      b.style.setProperty('--rx', (e.clientX - r.left) + 'px');
+      b.style.setProperty('--ry', (e.clientY - r.top) + 'px');
+      b.classList.remove('rippling'); void b.offsetWidth; b.classList.add('rippling');
+    });
+  });
+})();
+
+/* ---------- text scramble ---------- */
+const CHARS = '!<>-_\\/[]{}—=+*^?#01';
+function scramble(el, text) {
+  if (reduced || !el) { if (el) el.textContent = text; return; }
+  const from = el.textContent, len = Math.max(from.length, text.length);
+  const plan = Array.from({ length: len }, (_, i) => ({
+    to: text[i] || '', start: Math.floor(rnd(0, 18)), end: Math.floor(rnd(18, 34))
+  }));
+  let f = 0;
+  el.classList.add('scramble');
+  el.dataset.busy = '1';
+  (function frame() {
+    let out = '', done = 0;
+    plan.forEach((p, i) => {
+      if (f >= p.end) { done++; out += p.to; }
+      else if (f >= p.start) out += pick(CHARS.split(''));
+      else out += from[i] || '';
+    });
+    el.textContent = out;
+    if (done < plan.length) { f++; requestAnimationFrame(frame); }
+    else delete el.dataset.busy;
+  })();
+}
 
 /* ---------- boot ---------- */
 applyTheme(current);
